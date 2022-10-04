@@ -85,8 +85,12 @@ Node* llfilter(Node* head, Comp pred)
         return nullptr;
     } 
 
-    head = llfilter(head->next, pred);
-    
+    if (pred(head)) {
+        // case where head needs to be deleted
+    } else {
+        // case where we don't delete
+        
+    }
 }
 
 #endif
