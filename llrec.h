@@ -67,6 +67,11 @@ void llpivot(Node *&head, Node *&smaller, Node *&larger, int pivot);
  *   may change [i.e. be filtered])
  *
  */
+
+/*struct filterMe {
+    bool operator(Node*, )
+};*/
+
 template <typename Comp>
 Node* llfilter(Node* head, Comp pred);
 
@@ -85,12 +90,18 @@ Node* llfilter(Node* head, Comp pred)
         return nullptr;
     } 
 
-    if (pred(head)) {
+    if (pred(head->val)) {
         // case where head needs to be deleted
+        Node* temp  = head;
+        head = head->next;
+        delete temp;
+        return llfilter(head, pred);
     } else {
         // case where we don't delete
-        
+        head->next = llfilter(head->next, pred);
+        return head;
     }
 }
+
 
 #endif
