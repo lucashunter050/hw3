@@ -2,7 +2,9 @@
 #define HEAP_H
 #include <functional>
 #include <stdexcept>
+#include <vector>
 
+const int first = 1;
 template <typename T, typename PComparator = std::less<T> >
 class Heap
 {
@@ -79,7 +81,7 @@ Heap<T, PComparator>::Heap(int m, PComparator c) : ary(m), c1(c) {
 }
 
 template <typename T, typename PComparator>
-bool Heap<T, PComparator>::empty() {
+bool Heap<T, PComparator>::empty() const {
   // I indexed the vector starting at 1, so if it's only the empty spot
   // (size 1) our vector has no real elements
   if (!(items.size() - 1)) {
@@ -90,12 +92,13 @@ bool Heap<T, PComparator>::empty() {
 
 template <typename T, typename PComparator>
 void Heap<T, PComparator>::push(const T& item) {
-
+  // add the value to the end of the vector and trickle it up
+  items.push_back(item);
+  trickleUp(items.size()-1);
 }
 
 template <typename T, typename PComparator>
 void Heap<T, PComparator>::trickleUp(int idx) {
-
 }
 
 template <typename T, typename PComparator>
@@ -121,7 +124,7 @@ T const & Heap<T,PComparator>::top() const
   // Add code to return the top element
 
   // items.at(0) will be a dummy value, real values start at 1
-  return items[1];
+  return items[first];
 
 
 }
@@ -140,7 +143,12 @@ void Heap<T,PComparator>::pop()
 
   }
 
+  // swap with value in the back and popback
+  std::swap(items[first], items[items.size()-1]);
+  items.pop_back();
 
+  // then get this element into its right place, restoring the heap property
+  trickleDown(1);
 
 }
 
