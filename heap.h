@@ -63,24 +63,27 @@ public:
 private:
   /// Add whatever helper functions and data members you need below
 
+  // keeps track of how many elements are in the heap
+  size_t size_ = 0;
+
   // items_ vector stores the data
   std::vector<T> items_;
 
   // keeps track of what the order of the tree is
-  int ary_;
+  unsigned ary_;
 
   // keeps track of the functor -- i.e. if we are a min or max heap
   PComparator c1;
 
   // gets the parent node of a given index
-  int getParent(int idx);
+  unsigned getParent(unsigned idx);
 
   // checks if the node at the given index is a leaf
-  bool isLeaf(int idx);
+  bool isLeaf(unsigned idx);
 
   // trickle functions
-  void trickleUp(int idx);
-  void trickleDown(int idx);
+  void trickleUp(unsigned idx);
+  void trickleDown(unsigned idx);
 
 };
 
@@ -90,6 +93,9 @@ template <typename T, typename PComparator>
 Heap<T, PComparator>::Heap(int m, PComparator c) : ary_(m), c1(c) {
   
 }
+
+template <typename T, typename PComparator>
+Heap<T, PComparator>::~Heap() {}
 
 template <typename T, typename PComparator>
 bool Heap<T, PComparator>::empty() const {
@@ -105,19 +111,27 @@ template <typename T, typename PComparator>
 void Heap<T, PComparator>::push(const T& item) {
   // add the value to the end of the vector and trickle it up
   items_.push_back(item);
+  ++size_;
   trickleUp(items_.size()-1);
+  
 }
 
 template <typename T, typename PComparator>
-int Heap<T, PComparator>::getParent(int idx) {
-  int parent = (idx - 1) / ary_;
+unsigned Heap<T, PComparator>::getParent(unsigned idx) {
+  if (idx == 0) {
+    return 0;
+  }
+
+  unsigned parent = (idx - 1) / ary_;
+  return parent;
 }
 
 template <typename T, typename PComparator>
-bool Heap<T, PComparator>::isLeaf(int idx) {
+bool Heap<T, PComparator>::isLeaf(unsigned idx) {
   // checks if the left-most child node exists for a given index
   // if it isn't contained in the vector, it returns that the node is a leaf
-  if (((ary_ * idx) + 1) >= items_.size() - 1) {
+
+  if (((ary_ * idx) + 1) >= items_.size()) {
     return true;
   } else {
     return false;
@@ -125,8 +139,8 @@ bool Heap<T, PComparator>::isLeaf(int idx) {
 }
 
 template <typename T, typename PComparator>
-void Heap<T, PComparator>::trickleUp(int idx) {
-  int parent = getParent(idx);
+void Heap<T, PComparator>::trickleUp(unsigned idx) {
+  unsigned parent = getParent(idx);
 
   // min heap case
 
@@ -142,18 +156,20 @@ void Heap<T, PComparator>::trickleUp(int idx) {
 }
 
 template <typename T, typename PComparator>
-void Heap<T, PComparator>::trickleDown(int idx) {
+void Heap<T, PComparator>::trickleDown(unsigned idx) {
   // base case: the index is a leaf node
   if (isLeaf(idx)) {
     return;
   }
 
-  int smallestChild = ary_ * idx + 1;
-  int rChild = smallestChild;
+  unsigned smallestChild = ary_ * idx + 1;
+  unsigned rChild = smallestChild;
 
   // min heap implementation
 
-  while (rChild <= items_.size() - 1 && (rChild < ary_ * idx + ary_)) {
+  // while right child exists, keep testing if it's smaller than the smallest
+  // previously known child
+  while (rChild < items_.size() - 1 && (rChild < ary_ * idx + ary_)) {
     ++rChild;
     // replace comp with the functor
     // replacement is probably: c1(items_[smallestChild], items_[rChild])
@@ -209,8 +225,14 @@ void Heap<T,PComparator>::pop()
   std::swap(items_[0], items_[items_.size()-1]);
   items_.pop_back();
 
-  // then get this element into its right place, restoring the heap property
-  trickleDown(0);
+  // then get this element into its right place (if we haven't made the heap empty), 
+  // restoring the heap property
+
+  if (!empty()) {
+    trickleDown(0);
+  }
+
+  --size_;
 }
 
 
