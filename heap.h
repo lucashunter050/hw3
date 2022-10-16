@@ -4,7 +4,6 @@
 #include <stdexcept>
 #include <vector>
 
-const int first = 1;
 template <typename T, typename PComparator = std::less<T> >
 class Heap
 {
@@ -63,9 +62,21 @@ public:
 
 private:
   /// Add whatever helper functions and data members you need below
-  std::vector<T> items;
-  int ary;
+
+  // items_ vector stores the data
+  std::vector<T> items_;
+
+  // keeps track of what the order of the tree is
+  int ary_;
+
+  // keeps track of the functor -- i.e. if we are a min or max heap
   PComparator c1;
+
+  // gets the parent node of a given index
+  int getParent(int idx);
+
+  // checks if the node at the given index is a leaf
+  bool isLeaf(int idx);
 
   // trickle functions
   void trickleUp(int idx);
@@ -76,7 +87,7 @@ private:
 // Add implementation of member functions here
 
 template <typename T, typename PComparator>
-Heap<T, PComparator>::Heap(int m, PComparator c) : ary(m), c1(c) {
+Heap<T, PComparator>::Heap(int m, PComparator c) : ary_(m), c1(c) {
   
 }
 
@@ -84,7 +95,7 @@ template <typename T, typename PComparator>
 bool Heap<T, PComparator>::empty() const {
   // I indexed the vector starting at 1, so if it's only the empty spot
   // (size 1) our vector has no real elements
-  if (!(items.size() - 1)) {
+  if (!(items_.empty())) {
     return false;
   }
   return true;
@@ -93,17 +104,71 @@ bool Heap<T, PComparator>::empty() const {
 template <typename T, typename PComparator>
 void Heap<T, PComparator>::push(const T& item) {
   // add the value to the end of the vector and trickle it up
-  items.push_back(item);
-  trickleUp(items.size()-1);
+  items_.push_back(item);
+  trickleUp(items_.size()-1);
+}
+
+template <typename T, typename PComparator>
+int Heap<T, PComparator>::getParent(int idx) {
+  int parent = (idx - 1) / ary_;
+}
+
+template <typename T, typename PComparator>
+bool Heap<T, PComparator>::isLeaf(int idx) {
+  // checks if the left-most child node exists for a given index
+  // if it isn't contained in the vector, it returns that the node is a leaf
+  if (((ary_ * idx) + 1) >= items_.size() - 1) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 template <typename T, typename PComparator>
 void Heap<T, PComparator>::trickleUp(int idx) {
+  int parent = getParent(idx);
+
+  // min heap case
+
+  // replace with functor here
+  // probably: while (parent >= 0 && c1(items_[parent], items_[idx]))
+  // replacing: items_[idx] < items_[parent]
+  while (parent >= 0 && c1(items_[idx], items_[parent]))
+  {
+    std::swap(items_[parent], items_[idx]);
+    idx = parent;
+    parent = getParent(idx);
+  }  
 }
 
 template <typename T, typename PComparator>
 void Heap<T, PComparator>::trickleDown(int idx) {
+  // base case: the index is a leaf node
+  if (isLeaf(idx)) {
+    return;
+  }
+
+  int smallestChild = ary_ * idx + 1;
+  int rChild = smallestChild;
+
+  // min heap implementation
+
+  while (rChild <= items_.size() - 1 && (rChild < ary_ * idx + ary_)) {
+    ++rChild;
+    // replace comp with the functor
+    // replacement is probably: c1(items_[smallestChild], items_[rChild])
+    if (c1(items_[rChild], items_[smallestChild])) {
+      smallestChild = rChild;
+    }
+  }
+
+  // replace comp with the functor
   
+  // checks if the smallestChild has higher priority than the parent
+  if (c1(items_[smallestChild], items_[idx])) {
+    std::swap(items_[idx], items_[smallestChild]);
+    trickleDown(smallestChild);
+  }
 }
 
 // We will start top() for you to handle the case of 
@@ -123,10 +188,7 @@ T const & Heap<T,PComparator>::top() const
   // If we get here we know the heap has at least 1 item
   // Add code to return the top element
 
-  // items.at(0) will be a dummy value, real values start at 1
-  return items[first];
-
-
+  return items_[0];
 }
 
 
@@ -144,12 +206,11 @@ void Heap<T,PComparator>::pop()
   }
 
   // swap with value in the back and popback
-  std::swap(items[first], items[items.size()-1]);
-  items.pop_back();
+  std::swap(items_[0], items_[items_.size()-1]);
+  items_.pop_back();
 
   // then get this element into its right place, restoring the heap property
-  trickleDown(1);
-
+  trickleDown(0);
 }
 
 
