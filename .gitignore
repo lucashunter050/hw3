@@ -7,5 +7,5 @@ stack-test.cpp
 .DS_Store
 a.out
 llrec-test
-llrec-test.out
+llrec-test.o
 llrec.o
