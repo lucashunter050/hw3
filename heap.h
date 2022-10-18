@@ -235,6 +235,11 @@ void Heap<T,PComparator>::pop()
   --size_;
 }
 
+template <typename T, typename PComparator>
+size_t Heap<T, PComparator>::size() const
+{
+  return size_;
+}
 
 
 #endif
