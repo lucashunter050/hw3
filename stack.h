@@ -46,11 +46,17 @@ void Stack<T>::push(const T& item) {
 
 template <typename T>
 void Stack<T>::pop() {
+    if (this->empty()) {
+        throw std::underflow_error("attempted to pop() empty stack\n");
+    }
     std::vector<T>::pop_back();
 }
 
 template <typename T>
 const T& Stack<T>::top() const {
+    if (this->empty()) {
+        throw std::underflow_error("attempted to top() empty stack\n");
+    }
     return std::vector<T>::at(this->size()-1);
 }
 
