@@ -27,6 +27,9 @@ Stack<T>::~Stack() {}
 
 template <typename T>
 bool Stack<T>::empty() const {
+    // call to size here doesn't cause infinite recursion because
+    // it calls the derived version which then scopes to the base 
+    // and calls that one
     if (this->size()) {
         return false;
     } else {
