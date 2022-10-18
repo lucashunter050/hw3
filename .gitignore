@@ -1,0 +1,6 @@
+heap_test/
+logicsim/plantuml.jar
+basicheaptests.cpp
+llrec-test.cpp
+llrec-test1.in 
+stack-test.cpp
