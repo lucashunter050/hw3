@@ -8,6 +8,9 @@ void llpivot(Node *&head, Node *&smaller, Node *&larger, int pivot)
 {
     // base case, reached end of the list
     if (!head) {
+        // correction here: cleaned out garbage values of smaller and larger
+        smaller = nullptr;
+        larger = nullptr;
         return;
     }
     
