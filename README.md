@@ -5,6 +5,7 @@ Heap written questions:
 - These are in the file titled "2022-10-11 21-40.pdf"
 
 Notes on how to run logic sim
+
 To run the logic simulator:
 1. Navigate to the logicsim folder
 2. Type make
