@@ -2,7 +2,8 @@
 CSCI-104 HW3
 
 Heap written questions:
-- These are in the file titled "2022-10-11 21-40.pdf"
+- These were in the file titled "2022-10-11 21-40.pdf" in the initial on-time git commit
+- I've added a properly named copy of that pdf called "q4_heaps.pdf" but it has identical contents to the original pdf
 
 Notes on how to run logic sim
 
