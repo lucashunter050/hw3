@@ -1,5 +1,4 @@
 heap_test/
-logicsim/plantuml.jar
 basicheaptests.cpp
 stack-test.cpp
 .DS_Store
@@ -9,3 +8,17 @@ llrec-test.o
 llrec.o
 hw3_tests/
 hw3_tests.tar.gz
+logicsim/1129my_and.png
+logicsim/1129my_and.uml
+logicsim/1129my_not.uml
+logicsim/1129not3.png
+logicsim/1129not3.uml
+logicsim/1129xor.png
+logicsim/1129xor.uml
+logicsim/1129xor3.png
+logicsim/1129xor3.uml
+logicsim/circuit.o
+logicsim/gate.o
+logicsim/logicsim
+logicsim/logicsim.o
+logicsim/wire.o
