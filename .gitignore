@@ -7,3 +7,5 @@ a.out
 llrec-test
 llrec-test.o
 llrec.o
+hw3_tests/
+hw3_tests.tar.gz
